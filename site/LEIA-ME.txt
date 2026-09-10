@@ -1,0 +1,87 @@
+LIVRARIA E PAPELARIA AMERICANA / site
+=====================================
+
+ARQUIVOS
+  index.html   ... a página inteira (marcação e conteúdo)
+  styles.css   ... toda a aparência: tokens da marca no :root, componentes
+                   e os cinco gestos de animação no fim do arquivo
+  script.js    ... só o que precisa de estado: número do WhatsApp,
+                   interruptor de animação, retorno da newsletter, ano
+  brand/       ... o selo da loja
+
+COMO ABRIR
+  Duplo clique em index.html. Não precisa de servidor nem de instalação.
+
+O QUE TROCAR PRIMEIRO
+  1. script.js, no topo, bloco CONFIG:
+       whatsapp: '5599000000000'   -> código do país + DDD + número, só dígitos
+       mensagem: '...'             -> texto que já vai escrito na conversa
+       mostrarPrecos: true         -> false esconde todos os preços
+       barraFixa: true             -> false remove a barra inferior fixa
+
+  2. index.html, seção #lojas: onde está [rua e número], [bairro] e [CEP].
+
+  3. index.html, seção #historia: onde está [ano].
+
+  4. A foto de abertura. Na seção do herói, coluna da direita, o bloco
+     .hero-photo espera uma <img>:
+         <div class="hero-media"><img src="brand/fachada.jpg" alt="..."></div>
+
+  5. As outras fotos. Cada bloco listrado tem uma nota em mono dizendo o que
+     vai ali (ex.: "foto: mesa de livros · p&b"). Para colocar a foto real,
+     ponha uma <img> dentro do bloco:
+         <div class="photo"><img src="brand/mesa-de-livros.jpg" alt="..."></div>
+     O CSS já converte para preto e branco e recorta.
+
+  6. Preços e produtos: em #corredores e #vendidos, direto no HTML.
+
+CORES DA MARCA (styles.css, :root)
+  --ink     #0F2461   azul-marinho do selo: texto, réguas, fundos
+  --accent  #D81420   vermelho do selo: ação primária e ênfase
+  --paper   #F3F2F2   o chão de toda página
+
+O QUE NÃO MEXER SEM MOTIVO
+  --radius fica em 0: nenhum canto arredondado, é decisão do sistema.
+  As réguas são de 2px na tinta cheia, nunca fio de cabelo.
+  Rótulo de botão sempre rente à esquerda.
+  Fotografia sempre em preto e branco.
+
+ANIMAÇÃO
+  É quase toda em CSS, dirigida pelo rolar da página. O estado de repouso de cada
+  bloco é o estado visível, então a página funciona igual em navegador antigo
+  ou com "reduzir movimento" ligado no sistema. O interruptor no rodapé
+  desliga tudo e a escolha fica guardada no navegador.
+
+  Os sete gestos e onde mexer:
+
+  1. FAIXAS QUE REAGEM AO SCROLL      script.js, empurrarFaixas()
+     Rolar para baixo acelera; para cima inverte. Para tirar, apague o
+     ouvinte de scroll das faixas no fim do arquivo.
+
+  2. PREÇOS CONTANDO DE ZERO          script.js, contarPreco()
+     Só nos cinco preços do ranking. Para incluir outros, troque o seletor
+     em ligarContagem().
+
+  3. SELO GIRANDO NO RODAPÉ           styles.css, .footer-selo img
+     Uma volta completa enquanto o rodapé passa. É o único giro do sistema:
+     a marca é redonda e a volta é inteira, então ela está sempre em pé no
+     começo e no fim. Para desligar, apague as três linhas de animation.
+
+  4. CARTAZ TOMADO PELO VERMELHO      styles.css, .poster e @keyframes la-poster-*
+     Corte seco, sem meio-tom: papel com tinta marinho vira vermelho com
+     tinta branca no mesmo ponto do scroll. O corte é seco de propósito – num
+     meio-tom o texto perderia contraste. Para mover o ponto, mude o
+     animation-range das cinco regras.
+
+  5. RÉGUA DA LINHA DO TEMPO          styles.css, .tl-line
+     Se desenha de cima para baixo no ritmo do scroll.
+
+  6. CONTORNO SEGUINDO O CURSOR       styles.css @media (hover: hover)
+     A borda vermelha entra pelo lado por onde o mouse chegou. Só em mouse;
+     em toque não existe.
+
+  7. "ABERTO AGORA" DE VERDADE        script.js, CONFIG.horario
+     Lê o relógio de quem visita e diz aberto e a que horas fecha, ou
+     fechado e quando abre. O ponto vermelho para de piscar e fica cinza
+     fora do expediente. Ajuste os horários em CONFIG.horario – 0 é domingo,
+     null é fechado, [8, 18] é das 8h às 18h.
