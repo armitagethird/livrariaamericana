@@ -15,6 +15,13 @@
   --surface:    #EAE9E9;  /* células preenchidas */
   --white:      #FCFCFC;
 
+  /* referência à bandeira — três usos e só três.
+     Verde é cor de sinal (3,4:1 no papel): ponto, etiqueta, chrome, nunca texto.
+     Amarelo é cor de campo (1,2:1 no papel): chapado com tipo marinho em cima,
+     nunca tinta. O azul da bandeira não virou token: o marinho da marca já é ele. */
+  --flag-green:  #009739;
+  --flag-yellow: #FFDF00;
+
   /* cor — rampa vermelho */
   --red-100: #fff2f0; --red-200: #ffe0db; --red-300: #ffc3bc; --red-400: #ff968b;
   --red-500: #ff534d; --red-600: #D81420; --red-700: #ae141a; --red-800: #7c1213; --red-900: #4d1613;
@@ -98,6 +105,26 @@ button, input { font: inherit; }
 .mono-sm { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
 
 .kicker      { color: var(--accent); margin-bottom: 10px; }
+.kicker, .kicker-soft, .scene--amarelo > .wrap > .mono:first-child { display: flex; align-items: center; gap: 10px; }
+
+/* a construção da bandeira desenhada em régua de 2px: retângulo, losango
+   inscrito, círculo inscrito, faixa atravessando. Monocromático, na cor do
+   próprio rótulo. É desenho, não cor. */
+.glifo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 19px;
+  border: var(--rule) solid currentColor;
+  flex: 0 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+.glifo i { display: block; width: 11px; height: 11px; border: var(--rule) solid currentColor; transform: rotate(45deg); }
+.glifo--circulo i { width: 10px; height: 10px; border-radius: 50%; transform: none; }
+.glifo--faixa i { width: 11px; height: 11px; border-radius: 50%; transform: none; }
+.glifo--faixa::after { content: ''; position: absolute; left: -3px; right: -3px; height: 3px; background: currentColor; transform: rotate(-17deg); }
 .kicker-soft { color: var(--red-400); margin-bottom: 10px; }
 .kicker-cool { color: var(--ink-soft); }
 
@@ -342,9 +369,11 @@ button, input { font: inherit; }
 .hero-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: clamp(12px, min(3.5vw, 2.4svh), 26px); }
 .hero-kicker span:last-child { color: var(--navy-200); font-size: clamp(9px, 2.4vw, 11px); }
 
-.dot { width: 10px; height: 10px; background: var(--accent); flex: 0 0 auto; animation: la-blink 1.5s steps(1, end) infinite; }
-/* fora do horário: o ponto para de piscar e perde a cor de ação */
+/* aberto agora: verde é estado, o vermelho ficou só para ação */
+.dot { width: 10px; height: 10px; background: var(--flag-green); flex: 0 0 auto; animation: la-blink 1.5s steps(1, end) infinite; }
+/* fora do horário: o ponto para de piscar e perde a cor de estado */
 .dot--off { background: var(--n-500); animation: none; }
+.status-line { color: var(--ink); }
 
 .hero-h1 {
   font-size: clamp(46px, min(23vw, 16svh), 220px);
@@ -404,6 +433,19 @@ button, input { font: inherit; }
 .marquee--red   .marquee-track { animation: la-marquee 26s linear infinite; }
 .marquee--paper .marquee-track { animation: la-marquee-rev 30s linear infinite; }
 
+/* o losango da bandeira no lugar do ponto separador: um quadrado girado 45°
+   é a única forma que entra num sistema que não admite curva */
+.losango {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 16px;
+  background: var(--flag-yellow);
+  transform: rotate(45deg);
+  vertical-align: middle;
+}
+.marquee--paper .losango { background: var(--ink); }
+
 .marquee-track span {
   flex: 0 0 auto;
   padding-right: 22px;
@@ -420,6 +462,23 @@ button, input { font: inherit; }
 .scene--navy  { background: var(--ink);    color: var(--white); border-top: var(--rule) solid var(--ink); }
 .scene--paper { background: var(--paper);  color: var(--ink);   border-top: var(--rule) solid var(--ink); }
 .scene--red   { background: var(--accent); color: var(--white); border-top: var(--rule) solid var(--ink); }
+/* o único campo amarelo do site: a última chamada antes do rodapé.
+   Tipo marinho sobre amarelo dá 10,9:1, dos melhores pares que existem.
+   A régua proporcional emoldura em cima e embaixo, o mesmo gesto do rodapé,
+   para o fim da página inteiro conversar. */
+.scene--amarelo { position: relative; background: var(--flag-yellow); color: var(--ink); }
+.scene--amarelo .rule-bandeira { position: absolute; left: 0; right: 0; margin: 0; }
+.scene--amarelo .rule-bandeira--topo { top: 0; }
+.scene--amarelo .rule-bandeira--base { bottom: 0; }
+
+/* a armadilha do chapado amarelo: o segmento do losango é amarelo e sumiria.
+   Nenhum elemento da bandeira tem cor fixa, todos têm papel: aqui o losango
+   é o próprio chão, então o segmento assume o marinho. */
+.scene--amarelo .rule-bandeira span:nth-child(2),
+.scene--amarelo .rule-bandeira span:nth-child(4) { background: var(--ink); }
+.scene--amarelo .lead { color: var(--navy-800); }
+.scene--amarelo .input { border-color: var(--ink); }
+.scene--amarelo .news-ok { background: var(--ink); color: var(--white); }
 .scene--flush { padding-inline: 0; }
 
 /* cartaz: a seção é tomada pelo vermelho conforme você rola por ela.
@@ -783,6 +842,17 @@ button, input { font: inherit; }
 .footer-links a { color: var(--white); font-size: 15px; min-height: 24px; }
 .footer-links a:hover { color: var(--red-400); }
 .footer .rule-soft { margin: clamp(28px, 6vw, 48px) 0 18px; }
+
+/* assinatura: verde, amarelo e branco em células iguais. O azul da bandeira
+   não aparece porque é o próprio chão do rodapé. */
+.rule-bandeira {
+  display: flex;
+  height: 6px;
+  margin: clamp(28px, 6vw, 48px) 0 18px;
+}
+.rule-bandeira span:nth-child(1), .rule-bandeira span:nth-child(5) { flex: 14; background: var(--flag-green); }
+.rule-bandeira span:nth-child(2), .rule-bandeira span:nth-child(4) { flex: 33; background: var(--flag-yellow); }
+.rule-bandeira span:nth-child(3) { flex: 6; background: var(--white); }
 .footer-base { display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: center; }
 .footer-base p { color: var(--navy-400); font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 
@@ -814,18 +884,18 @@ button, input { font: inherit; }
   transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
 }
 .progresso.aparece { opacity: 1; transform: none; pointer-events: auto; }
+.progresso.aparece:hover { transform: translateY(-3px); }
 
 .progresso-anel { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
 .progresso-arco {
   fill: none;
-  stroke: var(--accent);
+  stroke: var(--accent);            /* ponto de partida; o script conduz a cor */
   stroke-width: 5;
   stroke-linecap: butt;              /* sem ponta arredondada: o sistema não arredonda nada */
   stroke-dasharray: 282.74;          /* 2πr, r = 45 */
   stroke-dashoffset: 282.74;         /* repouso: anel vazio */
-  transition: stroke 0.18s ease;
+  transition: stroke 0.25s linear;
 }
-.progresso:hover .progresso-arco { stroke: var(--ink); }
 
 .progresso-selo {
   position: absolute;

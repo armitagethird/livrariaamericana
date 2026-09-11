@@ -40,6 +40,34 @@ CORES DA MARCA (styles.css, :root)
   --accent  #D81420   vermelho do selo: ação primária e ênfase
   --paper   #F3F2F2   o chão de toda página
 
+REFERÊNCIA À BANDEIRA
+  Três usos, e só três. Fora deles a página segue marinho, vermelho e papel.
+
+  --flag-green  #009739   o ponto de "aberto agora". Verde é estado; assim o
+                          vermelho voltou a significar só ação. Fora do
+                          expediente o ponto fica cinza e para de piscar.
+
+  --flag-yellow #FFDF00   o campo da newsletter, última chamada antes do
+                          rodapé. É o único chapado amarelo do site, e entrou
+                          no lugar de um campo vermelho: tira um vermelho da
+                          página e o contraste sobe de 5,1:1 (branco sobre
+                          vermelho) para 10,9:1 (marinho sobre amarelo).
+
+                          O losango que separa os itens da faixa vermelha.
+                          Um quadrado girado 45°, a única forma que entra num
+                          sistema que não admite curva. Na faixa clara o
+                          losango é marinho, porque amarelo sobre papel dá
+                          1,2:1 e some.
+
+                          A régua do rodapé, em verde, amarelo e branco, em
+                          células iguais. O azul da bandeira não aparece
+                          porque o marinho da marca já é ele: #0F2461 contra
+                          #002776.
+
+  Regra para não estragar: verde é cor de sinal (3,4:1 no papel), serve para
+  ponto, etiqueta e chrome, nunca para texto. Amarelo é cor de campo (1,2:1 no
+  papel), só entra como chapado com tipo marinho em cima, nunca como tinta.
+
 O QUE NÃO MEXER SEM MOTIVO
   --radius fica em 0: nenhum canto arredondado, é decisão do sistema.
   As réguas são de 2px na tinta cheia, nunca fio de cabelo.

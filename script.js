@@ -378,6 +378,32 @@
 
   var VOLTA = 282.74;   /* 2πr, r = 45 no viewBox do SVG */
 
+  /* o anel atravessa as três cores enquanto você lê: começa no vermelho da
+     marca, passa pelo amarelo da bandeira e fecha no verde. É o único lugar
+     do site onde as três aparecem juntas, e elas aparecem em sequência, nunca
+     ao mesmo tempo. */
+  var PARADAS = [
+    { p: 0.00, cor: [216, 20, 32] },
+    { p: 0.50, cor: [255, 223, 0] },
+    { p: 1.00, cor: [0, 151, 57] }
+  ];
+
+  function corDoProgresso(lido) {
+    for (var i = 1; i < PARADAS.length; i++) {
+      if (lido <= PARADAS[i].p) {
+        var a = PARADAS[i - 1], b = PARADAS[i];
+        var t = (b.p - a.p) === 0 ? 0 : (lido - a.p) / (b.p - a.p);
+        var canal = [];
+        for (var k = 0; k < 3; k++) {
+          canal.push(Math.round(a.cor[k] + (b.cor[k] - a.cor[k]) * t));
+        }
+        return 'rgb(' + canal.join(',') + ')';
+      }
+    }
+    var fim = PARADAS[PARADAS.length - 1].cor;
+    return 'rgb(' + fim.join(',') + ')';
+  }
+
   var medidor = document.getElementById('progresso');
   var arco = document.getElementById('progresso-arco');
   var seloGirando = document.getElementById('progresso-selo');
@@ -388,6 +414,7 @@
     var lido = altura > 0 ? Math.min(1, Math.max(0, window.pageYOffset / altura)) : 0;
 
     arco.style.strokeDashoffset = String(VOLTA * (1 - lido));
+    arco.style.stroke = corDoProgresso(lido);
     medidor.setAttribute('aria-label', 'Leitura em ' + Math.round(lido * 100) + '%. Voltar ao topo');
     if (seloGirando && !semMovimento()) {
       seloGirando.style.transform = 'rotate(' + (lido * 360).toFixed(1) + 'deg)';
